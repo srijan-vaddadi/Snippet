@@ -1,5 +1,7 @@
+import { useAuth } from "@clerk/nextjs";
 import { mainColor } from "../../colours";
 import CodeIcon from "@mui/icons-material/Code";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -22,11 +24,16 @@ function Navbar() {
 function Logo() {
   return (
     <div className="flex gap-2 items-center">
-      <div style={{backgroundColor: mainColor}} className={`p-[6px] rounded-md`}>
+      <div
+        style={{ backgroundColor: mainColor }}
+        className={`p-[6px] rounded-md`}
+      >
         <CodeIcon sx={{ fontSize: 27, color: "white" }} />
       </div>
       <div className="flex gap-1 text-[19px] ">
-      <span className="font-bold" style={{ color: mainColor }}>Snippet</span>
+        <span className="font-bold" style={{ color: mainColor }}>
+          Snippet
+        </span>
         <span className="text-slate-600">Master</span>
       </div>
     </div>
@@ -34,20 +41,35 @@ function Logo() {
 }
 
 function Buttons() {
+  const { userId } = useAuth();
   return (
-    <div className="flex gap-2 max-sm:flex-col max-sm:w-[60%] max-sm:mt-8">
-      <button
-        style={{ backgroundColor: mainColor }}
-        className="max-sm:w-full p-[8px] px-6 text-sm text-white rounded-md"
-      >
-        Sign in
-      </button>
-      <button
-        style={{ color: mainColor, borderColor: mainColor }}
-        className="text-sm border hover:bg-mainColor hover:text-white p-[8px] px-6 rounded-md"
-      >
-        Sign up
-      </button>
+    <div className="max-sm:w-full">
+      {userId ? (
+        <Link href="/my-notes">
+          <button
+            className={`max-sm:w-full  bg-purple-600 p-[8px] px-6 text-sm text-white rounded-md`}
+          >
+            Access To The App
+          </button>
+        </Link>
+      ) : (
+        <div className="flex gap-2 max-sm:flex-col max-sm:w-full max-sm:mt-8">
+          <button
+            className={`max-sm:w-full  bg-purple-600 p-[8px] px-6 text-sm text-white rounded-md`}
+          >
+            <Link href="/sign-in"> Sign In</Link>
+          </button>
+
+          <Link href="/sign-up">
+            <button
+              className={` max-sm:w-full text-sm border border-purple-600 text-purple-600 
+      hover:bg-purple-600 hover:text-white p-[8px] px-6 rounded-md`}
+            >
+              Sign Up
+            </button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

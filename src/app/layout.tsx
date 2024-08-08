@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
+import { ClerkProvider } from "@clerk/clerk-react";
+import { useRouter } from "next/router";
+import { Url } from "url";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,9 +23,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const router = useRouter();
+
+  const routerPush: RouterFn = (url: Url, options?: TransitionOptions) => {
+    return router.push(url, undefined, options);
+  };
+
+  const routerReplace: RouterFn = (url: Url, options?: TransitionOptions) => {
+    return router.replace(url, undefined, options);
+  };
+
   return (
     <html lang="en">
-      <body className={poppins.className}>{children}</body>
+      <ClerkProvider routerPush={routerPush} routerReplace={routerReplace}>
+        <body className={poppins.className}>{children}</body>
+      </ClerkProvider>
     </html>
   );
 }
